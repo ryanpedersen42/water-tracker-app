@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View, Picker } from 'react-native';
 
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import CustomButton from '../components/custom-button';
-
 const AddScreen = (props) => {
-  const [language, changeLanguage] = useState('8')
+  const [quantitySelected, changeQuantity] = useState('8')
   return (
     <View style={styles.screen}>
       <Text>Add Drink Screen</Text>
       <Picker
-        selectedValue={language}
-        style={{height: 50, width: 100}}
+        selectedValue={quantitySelected}
+        style={styles.pickerStyles}
         onValueChange={(itemValue, itemIndex) =>
-          changeLanguage(itemValue)
+          changeQuantity(itemValue)
         }>
         <Picker.Item label="8oz" value="8" />
         <Picker.Item label="12oz" value="12" />
@@ -22,10 +19,15 @@ const AddScreen = (props) => {
         <Picker.Item label="24oz" value="24" />
         <Picker.Item label="32oz" value="32" />
       </Picker>
-        <Text>{language}</Text>
       </View>
   )
 }
+
+AddScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Water Tracker'
+  };
+};
 
 const styles = StyleSheet.create({
   screen: {
@@ -34,6 +36,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  pickerStyles: {
+    height: 50,
+    width: 100,
+  }
 })
 
 export default AddScreen;

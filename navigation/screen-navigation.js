@@ -35,10 +35,21 @@ const tabScreenConfig = {
   }
 }
 
+const defaultStackNavOptions = {
+  // headerStyle: {
+  //   backgroundColor: Platform.OS === 'android' ? 'white' : ''
+  // },
+  headerTintColor: 'blue',
+  headerTitle: 'Water Screen'
+};
+
 const TabNavigator = createBottomTabNavigator({
   Goal: GoalScreen,
   Add: AddScreen,
   Progress: ProgressScreen,
+}, 
+{
+  defaultNavigationOptions: defaultStackNavOptions
 });
 
 const AddProgressTabNavigator =
@@ -55,19 +66,5 @@ const AddProgressTabNavigator =
           activeTintColor: Colors.accentColor
       }
 });
-
-
-
-// const MainNavigator = createDrawerNavigator({
-//   Today: TodayNavigator,
-//   Goals: GoalNavigator,
-//   Calendar: CalendarNavigator,
-//   Progress: ProgressNavigator,
-// },
-// {
-//   contentOptions: {
-//     activeTintColor: Colors.primaryColor
-//   }
-// });
 
 export default createAppContainer(TabNavigator);
