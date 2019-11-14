@@ -1,8 +1,8 @@
-import { SET_GOAL, UPDATE_WATER_GOAL, REDUCE_WATER } from './water-constants';
+import { UPDATE_WATER_GOAL, REDUCE_WATER, ADJUST_WATER } from './water-constants';
 
 const initialState = {
   waterGoal: 64,
-  waterProgress: 10,
+  waterProgress: 0,
 }
 
 export default (state = initialState, action) => {
@@ -17,10 +17,10 @@ export default (state = initialState, action) => {
           ...state,
           waterGoal: action.payload
         }
-      case SET_GOAL: 
+      case ADJUST_WATER: 
         return {
           ...state,
-          waterGoal: action.payload
+          waterProgress: state.waterProgress + action.payload
         }
       default: 
       return state;

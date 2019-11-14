@@ -13,12 +13,12 @@ const GoalScreen = (props) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    updateGoal(calculateCupsFromOunces(reduxWaterGoal))
+    updateGoal((reduxWaterGoal))
   }, []);
 
   const adjustWaterHandler = async (direction) => {
     if (direction === 'more') {
-      await updateGoal(waterGoal + 1)
+      await updateGoal(waterGoal + 8)
     }
     if (direction === 'lower') {
       if (waterGoal <= 8) {
@@ -27,7 +27,7 @@ const GoalScreen = (props) => {
           ]);
           return;
       }
-      await updateGoal(waterGoal - 1)
+      await updateGoal(waterGoal - 8)
     }
     await dispatch(updateWaterGoal(waterGoal))
   }
@@ -44,12 +44,11 @@ const GoalScreen = (props) => {
       <CustomButton onPress={() => adjustWaterHandler('lower')}>
          <Ionicons name="ios-remove-circle-outline" size={50} color='black' />
       </CustomButton>
-      <Text style={styles.goalNumber}>{waterGoal}</Text>
+      <Text style={styles.goalNumber}>{calculateCupsFromOunces(waterGoal)}</Text>
       <CustomButton onPress={() => adjustWaterHandler('more')}>
          <Ionicons name="ios-add-circle-outline" size={50} color='black' />
       </CustomButton>
       </View>
-      <Button title='Save' onPress={() => {}} />
     </View>
   );
 };
