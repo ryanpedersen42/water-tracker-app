@@ -1,63 +1,83 @@
-import React, { useState } from 'react';
-import { Text, StyleSheet, View, Picker, Button, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, StyleSheet, View, Dimensions } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { Slider, Button, ThemeProvider } from 'react-native-elements';
 
 import CustomButton from '../components/custom-button';
+import ProgressTracker from '../components/progress-tracker'
 import { updateDailyConsumption } from '../store/water-actions';
 import { Ionicons } from '@expo/vector-icons';
+import Colors from '../constants/Colors';
+
+const theme = {
+  Button: {
+    titleStyle: {
+      color: Colors.accentColorBlue,
+      fontFamily: 'inconsolata-regular',
+    },
+  },
+};
 
 const AddScreen = (props) => {
   const [quantitySelected, changeQuantity] = useState(8)
-  const currentWaterProgress = useSelector(state => state.water.waterProgress)
-  const testNumber = useSelector(state => state.water.waterGoal)
+  const [cupsSelected, updateCups] = useState(1)
 
   const dispatch = useDispatch()
-
+  
   const addWaterProgress = async () => {
-    await dispatch(updateDailyConsumption(+quantitySelected))
+    const ouncesSelected = (quantitySelected * cupsSelected)
+    await dispatch(updateDailyConsumption(+ouncesSelected))
+    await updateCups(1)
   }
 
-  // const addWaterProgress = async (direction) => {
-  //   if (direction === 'more') {
-  //     await updateGoal(waterGoal + 8)
-  //   }
-  //   if (direction === 'lower') {
-  //     if (waterGoal <= 8) {
-  //         Alert.alert("Cant have less than that!", 'You will wither away...', [
-  //           { text: 'alright!' }
-  //         ]);
-  //         return;
-  //     }
-  //     await updateGoal(waterGoal - 8)
-  //   }
-  //   await dispatch(updateDailyConsumption(+quantitySelected))
-  // }
+  const updateMultiplier = async (direction) => {
+    if (direction === 'more') {
+      await updateCups(cupsSelected + 1)
+    }
+    if (direction === 'less') {
+      await updateCups(cupsSelected - 1)
+    }
+  }
 
   return (
     <View style={styles.screen}>
+      <View style={styles.pickerSection}>
       <Text style={styles.title}>Glass Size?</Text>
-      <Picker
-        selectedValue={quantitySelected}
-        style={styles.pickerStyles}
-        onValueChange={(itemValue, itemIndex) =>
-          changeQuantity(itemValue)
-      }>
-        <Picker.Item label="8oz" value="8" />
-        <Picker.Item label="12oz" value="12" />
-        <Picker.Item label="16oz" value="16" />
-        <Picker.Item label="20oz" value="20" />
-        <Picker.Item label="24oz" value="24" />
-        <Picker.Item label="32oz" value="32" />
-      </Picker>
-      <View style={styles.buttonContainer}>
-        <CustomButton onPress={() =>{addWaterProgress('lower')}}>
-          <Ionicons name="ios-remove-circle-outline" size={50} color='black' />
-        </CustomButton>
-        <CustomButton onPress={() =>{addWaterProgress('more')}}>
-          <Ionicons name="ios-add-circle-outline" size={50} color='black' />
-        </CustomButton>
-      </View>
-        <Button title='Save' onPress={addWaterProgress} />
+        <View style={styles.sliderStyle}>
+        <Slider
+          value={quantitySelected}
+          minimumValue={6}
+          maximumValue={40}
+          step={2}
+          thumbTintColor={Colors.accentColorBlue}
+          onValueChange={value => changeQuantity(value)}
+        />
+        <Text style={styles.sliderText}>{quantitySelected}oz</Text>
+        </View>
+        </View>
+        <View style={styles.quantitySection}>
+          <Text style={styles.title}>How Many?</Text>
+          <View style={styles.buttonContainer}>
+            <CustomButton onPress={() =>{updateMultiplier('less')}}>
+              <Ionicons name="ios-remove-circle-outline" size={50} color={Colors.accentColorBlue} />
+            </CustomButton>
+            <Text style={styles.quantityText}>{cupsSelected}</Text>
+            <CustomButton onPress={() =>{updateMultiplier('more')}}>
+              <Ionicons name="ios-add-circle-outline" size={50} color={Colors.accentColorBlue} />
+            </CustomButton>
+          </View>
+        </View>
+        <View style={styles.submitContainer}>
+          <ThemeProvider theme={theme}>
+            <Button 
+              title='Add to Log' 
+              type='clear'
+              containerStyle={styles.button} 
+              onPress={addWaterProgress} />
+          </ThemeProvider>
+        </View>
+      <ProgressTracker />
+        {/* <Text style={styles.sliderText}>{currentProgress}%</Text> */}
       </View>
   )
 }
@@ -65,18 +85,39 @@ const AddScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: Colors.primaryColor,
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   title:  {
+    fontFamily: 'inconsolata-regular',
     fontSize: 20,
-    // fontWeight: 'bold'
+    color: Colors.accentColorOrange,
   },
-  pickerStyles: {
-    height: 50,
-    width: 125,
+  pickerSection: {
+    marginTop: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  quantitySection: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  quantityText: {
+    fontFamily: 'inconsolata-regular',
+    fontSize: 50,
+    color: 'white',
+  },
+  sliderStyle: {
+    width: '70%',
+    height: 132,
+    margin: 15,
     maxWidth: '60%'
+  },
+  sliderText: {
+    fontFamily: 'inconsolata-regular',
+    textAlign: 'center',
+    fontSize: 35,
+    color: 'white',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -85,6 +126,13 @@ const styles = StyleSheet.create({
     width: 300,
     maxWidth: '80%'
   },
+  submitContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    width: '40%'
+  }
 })
 
 export default AddScreen;

@@ -5,6 +5,7 @@ import { useDispatch, useSelector} from 'react-redux';
 import CustomButton from '../components/custom-button';
 import { Ionicons } from '@expo/vector-icons';
 import { updateWaterGoal } from '../store/water-actions';
+import Colors from '../constants/Colors';
 
 const GoalScreen = (props) => {
   const [waterGoal, updateGoal] = useState();
@@ -42,11 +43,11 @@ const GoalScreen = (props) => {
       <Text style={styles.goalPrompt}>How many 8oz glasses of water would you like to drink each day?</Text>
       <View style={styles.buttonContainer}>
       <CustomButton onPress={() => adjustWaterHandler('lower')}>
-         <Ionicons name="ios-remove-circle-outline" size={50} color='black' />
+         <Ionicons name="ios-remove-circle-outline" size={50} color={Colors.accentColorBlue} />
       </CustomButton>
       <Text style={styles.goalNumber}>{calculateCupsFromOunces(waterGoal)}</Text>
       <CustomButton onPress={() => adjustWaterHandler('more')}>
-         <Ionicons name="ios-add-circle-outline" size={50} color='black' />
+         <Ionicons name="ios-add-circle-outline" size={50} color={Colors.accentColorBlue} />
       </CustomButton>
       </View>
     </View>
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     padding: 10,
+    backgroundColor: Colors.primaryColor,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -69,11 +71,14 @@ const styles = StyleSheet.create({
   },
   goalNumber: {
     fontSize: 50,
-    fontWeight: 'bold'
+    fontFamily: 'inconsolata-regular',
+    color: 'white'
   },
   goalPrompt: {
     margin: 10,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'inconsolata-regular',
+    color: Colors.accentColorOrange
   }
 })
 
