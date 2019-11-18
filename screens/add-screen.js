@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import CustomButton from '../components/custom-button';
 import ProgressTracker from '../components/progress-tracker'
-import { updateDailyConsumption, resetDailyConsumption, setAppReady } from '../store/water-actions';
+import { updateDailyConsumption, resetDailyConsumption, setAppReady, setNewGoal } from '../store/water-actions';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
@@ -30,6 +30,9 @@ const AddScreen = () => {
 
   useEffect(() => {
     checkDate()
+    dispatch(updateDailyConsumption(getWaterProgress()))
+
+    dispatch(setNewGoal(getWaterGoal()))
     dispatch(setAppReady())
     }, []);
   
@@ -75,11 +78,29 @@ const AddScreen = () => {
     }
   }
 
+  const getWaterGoal = async () => {
+    try {
+      const waterGoal = await AsyncStorage.getItem('waterGoal');
+      return waterGoal
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  const getWaterProgress = async () => {
+    try {
+      const waterProgress = await AsyncStorage.getItem('waterProgress')
+      return waterProgress;
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
   const getStoredDate = async () => {
     const storedDate = await AsyncStorage.getItem('storedDate')
 
     if (!storedDate) {
-      const newDate = await moment().format("MMM Do YY");
+      const newDate = await moment().format("ll");
       AsyncStorage.setItem('storedDate', JSON.stringify(newDate))
     } else {
       return storedDate;
