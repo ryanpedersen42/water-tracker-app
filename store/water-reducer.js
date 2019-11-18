@@ -13,15 +13,10 @@ export default (state = initialState, action) => {
         ...state,
         waterGoal: action.payload
       }
-      case REDUCE_WATER:
-        return {
-          ...state,
-          waterGoal: action.payload
-        }
       case ADJUST_WATER: 
         return {
           ...state,
-          waterProgress: state.waterProgress + action.payload
+          waterProgress: action.payload
         }
       case RESET_WATER: 
        return {

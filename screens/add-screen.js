@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import CustomButton from '../components/custom-button';
 import ProgressTracker from '../components/progress-tracker'
-import { updateDailyConsumption, resetDailyConsumption, setAppReady, setNewGoal } from '../store/water-actions';
+import { updateDailyConsumption, setNewGoal, resetDailyConsumption, setAppReady } from '../store/water-actions';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
@@ -28,11 +28,13 @@ const AddScreen = () => {
 
   const dispatch = useDispatch()
 
+
   useEffect(() => {
     checkDate()
-    dispatch(updateDailyConsumption(getWaterProgress()))
-
-    dispatch(setNewGoal(getWaterGoal()))
+    //pass in 0, async result
+    // dispatch(updateDailyConsumption(getWaterProgress()))
+    getWaterGoal()
+    // dispatch(setNewGoal(getWaterGoal()))
     dispatch(setAppReady())
     }, []);
   
@@ -81,7 +83,9 @@ const AddScreen = () => {
   const getWaterGoal = async () => {
     try {
       const waterGoal = await AsyncStorage.getItem('waterGoal');
-      return waterGoal
+      await console.log(JSON.parse(waterGoal))
+      const currentGoal = JSON.parse(waterGoal)
+      dispatch(setNewGoal(currentGoal))
     } catch(err) {
       console.log(err)
     }
@@ -90,7 +94,7 @@ const AddScreen = () => {
   const getWaterProgress = async () => {
     try {
       const waterProgress = await AsyncStorage.getItem('waterProgress')
-      return waterProgress;
+      return JSON.parse(waterProgress);
     } catch(err) {
       console.log(err)
     }
