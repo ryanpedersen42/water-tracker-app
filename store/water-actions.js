@@ -1,17 +1,34 @@
-import { UPDATE_WATER_GOAL, ADJUST_WATER } from './water-constants';
+import { UPDATE_WATER_GOAL, ADJUST_WATER, RESET_WATER, APP_READY } from './water-constants';
+import { AsyncStorage } from 'react-native'
 
-export const updateWaterGoal = (newGoal) => {
+export const setNewGoal = (newGoal) => {
+  try {
+    AsyncStorage.setItem('waterGoal', JSON.stringify(newGoal));
+  } catch(err) {
+    console.log(err)
+  }
   return { type: UPDATE_WATER_GOAL, payload: newGoal };
 };
 
-export const reduceWater = (newGoal) => {
-  return { type: REDUCE_WATER, payload: newGoal}
-}
-
-export const setGoal = (newGoal) => {
-  return { type: REDUCE_WATER, payload: newGoal}
-}
-
-export const updateDailyConsumption = (adjustedWater) => {
+export const updateDailyConsumption = (dailyProgess, adjustedWater) => {
+  try {
+    const fullNumber = dailyProgess + adjustedWater
+    AsyncStorage.setItem('waterProgress', JSON.stringify(fullNumber))
+  } catch(err) {
+    console.log(err)
+  }
   return { type: ADJUST_WATER, payload: adjustedWater } 
+}
+
+export const resetDailyConsumption = () => {
+  try {
+    AsyncStorage.setItem('waterProgress', JSON.stringify(0))
+  } catch(err) {
+    console.log(err)
+  }
+  return { type: RESET_WATER }
+}
+
+export const setAppReady = () => {
+  return { type: APP_READY }
 }

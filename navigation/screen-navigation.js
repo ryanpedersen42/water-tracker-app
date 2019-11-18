@@ -3,20 +3,25 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import AddScreen from '../screens/add-screen';
 import GoalScreen from '../screens/goal-screen';
-
-
-const defaultStackNavOptions = {
-  headerTintColor: 'blue',
-  headerTitle: 'Water App'
-};
+// import StartupScreen from '../screens/start-screen';
+import Colors from '../constants/Colors';
 
 const TabNavigator = createBottomTabNavigator({
   Add: AddScreen,
   Goal: GoalScreen,
 }, 
 {
-  defaultNavigationOptions: defaultStackNavOptions
+  tabBarOptions: {
+    style: {
+      backgroundColor: Colors.primaryColor,
+      borderTopWidth: 0
+    },
+    labelStyle: {
+      fontFamily: 'inconsolata-regular',
+      fontSize: 20,
+    },
+    activeTintColor: Colors.accentColorOrange
+  },
 });
-
 
 export default createAppContainer(TabNavigator);

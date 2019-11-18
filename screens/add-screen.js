@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View, Dimensions } from 'react-native';
+import { Text, StyleSheet, View, Dimensions, AsyncStorage, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Slider, Button, ThemeProvider } from 'react-native-elements';
+import moment from 'moment';
 
 import CustomButton from '../components/custom-button';
 import ProgressTracker from '../components/progress-tracker'
-import { updateDailyConsumption } from '../store/water-actions';
+import { updateDailyConsumption, resetDailyConsumption, setAppReady } from '../store/water-actions';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
@@ -14,19 +15,31 @@ const theme = {
     titleStyle: {
       color: Colors.accentColorBlue,
       fontFamily: 'inconsolata-regular',
+      margin: 15
     },
   },
 };
 
-const AddScreen = (props) => {
-  const [quantitySelected, changeQuantity] = useState(8)
+const AddScreen = () => {
+  const [quantitySelected, changeQuantity] = useState(12)
   const [cupsSelected, updateCups] = useState(1)
+  const dailyProgress = useSelector(state => state.water.waterProgress)
+  const isAppReady = useSelector(state => state.water.isAppReady)
 
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    checkDate()
+    dispatch(setAppReady())
+    }, []);
   
   const addWaterProgress = async () => {
-    const ouncesSelected = (quantitySelected * cupsSelected)
-    await dispatch(updateDailyConsumption(+ouncesSelected))
+    const ouncesSelected = +(quantitySelected * cupsSelected)
+    if (ouncesSelected < 0 && dailyProgress < Math.abs(ouncesSelected)) {
+      await dispatch(resetDailyConsumption())
+    } else {
+      await dispatch(updateDailyConsumption(dailyProgress, ouncesSelected))
+    }
     await updateCups(1)
   }
 
@@ -39,10 +52,48 @@ const AddScreen = (props) => {
     }
   }
 
+  const checkDate = async () => {
+    // AsyncStorage.clear()
+    let storedDate = await getStoredDate()
+    let currentDateString = moment().format('ll')
+
+    if (storedDate) {
+      if (moment(currentDateString).isAfter(storedDate)) {
+        try {
+          await AsyncStorage.setItem('storedDate', currentDateString)
+          await dispatch(resetDailyConsumption())
+        } catch(err) {
+          console.log(err)
+        }
+      } 
+    } else {
+      try {
+        await AsyncStorage.setItem('storedDate', currentDateString)
+      } catch(err) {
+        console.log(err)
+      }
+    }
+  }
+
+  const getStoredDate = async () => {
+    const storedDate = await AsyncStorage.getItem('storedDate')
+
+    if (!storedDate) {
+      const newDate = await moment().format("MMM Do YY");
+      AsyncStorage.setItem('storedDate', JSON.stringify(newDate))
+    } else {
+      return storedDate;
+    }
+  }
+
+  if (!isAppReady) {
+    <ActivityIndicator size="large" color={Colors.primary} />
+  }
+
   return (
     <View style={styles.screen}>
       <View style={styles.pickerSection}>
-      <Text style={styles.title}>Glass Size?</Text>
+      <Text style={styles.title}>Cup Size?</Text>
         <View style={styles.sliderStyle}>
         <Slider
           value={quantitySelected}
@@ -73,11 +124,17 @@ const AddScreen = (props) => {
               title='Add to Log' 
               type='clear'
               containerStyle={styles.button} 
-              onPress={addWaterProgress} />
+              onPress={addWaterProgress} 
+            />
+            <Button 
+              title='Reset Log' 
+              type='clear'
+              containerStyle={styles.button} 
+              onPress={() => dispatch(resetDailyConsumption())}           
+            />
           </ThemeProvider>
         </View>
-      <ProgressTracker />
-        {/* <Text style={styles.sliderText}>{currentProgress}%</Text> */}
+        <ProgressTracker />
       </View>
   )
 }

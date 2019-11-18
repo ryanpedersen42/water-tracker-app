@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View, Dimensions, Alert, Button } from 'react-native';
+import { Text, StyleSheet, View, Dimensions, Alert, Button, AsyncStorage } from 'react-native';
 import { useDispatch, useSelector} from 'react-redux';
 
 import CustomButton from '../components/custom-button';
 import { Ionicons } from '@expo/vector-icons';
-import { updateWaterGoal } from '../store/water-actions';
+import { setNewGoal, getGoal } from '../store/water-actions';
 import Colors from '../constants/Colors';
 
-const GoalScreen = (props) => {
+const GoalScreen = () => {
   const [waterGoal, updateGoal] = useState();
   const reduxWaterGoal = useSelector(state => state.water.waterGoal)
 
@@ -19,6 +19,7 @@ const GoalScreen = (props) => {
 
   const adjustWaterHandler = async (direction) => {
     if (direction === 'more') {
+      await dispatch(setNewGoal(waterGoal + 8)) 
       await updateGoal(waterGoal + 8)
     }
     if (direction === 'lower') {
@@ -28,9 +29,9 @@ const GoalScreen = (props) => {
           ]);
           return;
       }
+      await dispatch(setNewGoal(waterGoal - 8)) 
       await updateGoal(waterGoal - 8)
     }
-    await dispatch(updateWaterGoal(waterGoal))
   }
 
   const calculateCupsFromOunces = (number) => {
