@@ -1,4 +1,4 @@
-import { UPDATE_WATER_GOAL, REDUCE_WATER, ADJUST_WATER, RESET_WATER, APP_READY } from './water-constants';
+import { UPDATE_WATER_GOAL, ADJUST_WATER, RESET_WATER, APP_READY } from './water-constants';
 
 const initialState = {
   waterGoal: 80,

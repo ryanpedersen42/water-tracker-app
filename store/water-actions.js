@@ -10,10 +10,9 @@ export const setNewGoal = (newGoal) => {
   return { type: UPDATE_WATER_GOAL, payload: newGoal };
 };
 
-export const updateDailyConsumption = (dailyProgess, adjustedWater) => {
+export const updateDailyConsumption = (adjustedWater) => {
   try {
-    const fullNumber = dailyProgess + adjustedWater
-    AsyncStorage.setItem('waterProgress', JSON.stringify(fullNumber))
+    AsyncStorage.setItem('waterProgress', JSON.stringify(adjustedWater))
   } catch(err) {
     console.log(err)
   }

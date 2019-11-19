@@ -28,22 +28,21 @@ const AddScreen = () => {
 
   const dispatch = useDispatch()
 
-
   useEffect(() => {
     checkDate()
-    //pass in 0, async result
-    // dispatch(updateDailyConsumption(getWaterProgress()))
     getWaterGoal()
-    // dispatch(setNewGoal(getWaterGoal()))
+    getWaterProgress()
     dispatch(setAppReady())
     }, []);
   
   const addWaterProgress = async () => {
     const ouncesSelected = +(quantitySelected * cupsSelected)
+    //updatedDailyCOnsumption
+    const updatedDailyConsumption = dailyProgress + ouncesSelected
     if (ouncesSelected < 0 && dailyProgress < Math.abs(ouncesSelected)) {
       await dispatch(resetDailyConsumption())
     } else {
-      await dispatch(updateDailyConsumption(dailyProgress, ouncesSelected))
+      await dispatch(updateDailyConsumption(updatedDailyConsumption))
     }
     await updateCups(1)
   }
@@ -82,10 +81,17 @@ const AddScreen = () => {
 
   const getWaterGoal = async () => {
     try {
+      let reduxGoal;
       const waterGoal = await AsyncStorage.getItem('waterGoal');
-      await console.log(JSON.parse(waterGoal))
       const currentGoal = JSON.parse(waterGoal)
-      dispatch(setNewGoal(currentGoal))
+      
+      if (currentGoal) {
+        reduxGoal = currentGoal
+        dispatch(setNewGoal(reduxGoal))
+      } else {
+        reduxGoal = 8
+        dispatch(setNewGoal(reduxGoal))
+      }
     } catch(err) {
       console.log(err)
     }
@@ -93,8 +99,16 @@ const AddScreen = () => {
 
   const getWaterProgress = async () => {
     try {
+      let reduxProgress;
       const waterProgress = await AsyncStorage.getItem('waterProgress')
-      return JSON.parse(waterProgress);
+      const currentProgress = JSON.parse(waterProgress);
+
+      if (currentProgress) {
+        reduxProgress = currentProgress
+        dispatch(updateDailyConsumption(reduxProgress))
+      } else {
+        dispatch(resetDailyConsumption())
+      }
     } catch(err) {
       console.log(err)
     }
