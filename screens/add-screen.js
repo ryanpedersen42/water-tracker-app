@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View, Dimensions, AsyncStorage, ActivityIndicator } from 'react-native';
+import { Text, StyleSheet, View, Dimensions, AsyncStorage, ActivityIndicator, YellowBox } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Slider, Button, ThemeProvider } from 'react-native-elements';
 import moment from 'moment';
@@ -37,7 +37,6 @@ const AddScreen = () => {
   
   const addWaterProgress = async () => {
     const ouncesSelected = +(quantitySelected * cupsSelected)
-    //updatedDailyCOnsumption
     const updatedDailyConsumption = dailyProgress + ouncesSelected
     if (ouncesSelected < 0 && dailyProgress < Math.abs(ouncesSelected)) {
       await dispatch(resetDailyConsumption())
@@ -58,8 +57,9 @@ const AddScreen = () => {
 
   const checkDate = async () => {
     // AsyncStorage.clear()
+    console.disableYellowBox = true
     let storedDate = await getStoredDate()
-    let currentDateString = moment().format('ll')
+    let currentDateString = await moment().format('ll')
 
     if (storedDate) {
       if (moment(currentDateString).isAfter(storedDate)) {
