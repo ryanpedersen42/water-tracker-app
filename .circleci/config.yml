@@ -1,8 +1,7 @@
 version: 2
 publish: &publish
-  working_directory: ~/my-app
   docker:
-    - image: circleci/node:13.10.1
+    - image: circleci/node:10.4.1
   steps:
     - checkout
 
@@ -31,7 +30,7 @@ jobs:
 
 workflows:
   version: 2
-  my_app:
+  publish_to_expo:
     jobs:
       - publish_to_expo_dev:
           filters:
