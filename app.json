@@ -1,21 +1,20 @@
 {
   "expo": {
-    "name": "water-app",
+    "name": "water-consumption-app-rp",
     "slug": "water-app",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iTunesArtwork@1x.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/water-drop-new.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#625C66"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,7 +23,18 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.rpd42.waterapp",
+      "supportsTablet": true,
+      "buildNumber": "1.0.0"
+    }, 
+    "android": {
+      "package": "com.rpd42.water_app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/water-drop-new.png",
+        "backgroundColor": "#625C66"
+      },
+      "permissions": [],
+      "versionCode": 1
     }
   }
 }
