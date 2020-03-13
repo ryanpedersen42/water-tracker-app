@@ -1,7 +1,7 @@
 version: 2
 publish: &publish
   docker:
-    - image: circleci/node:10.4.1
+    - image: circleci/node:13.10.1
   steps:
     - checkout
 
