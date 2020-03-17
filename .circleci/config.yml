@@ -13,31 +13,32 @@ orbs:
             description: which release channel
             type: string
             default: dev
+        steps:
+          - build_command
+          - expo_command
     commands:
-      steps:
-        - checkout
-
-        # Download and cache dependencies
-        - restore_cache:
-            keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match
-            - v1-dependencies-
-
-        - run: npm install
-
-        - save_cache:
-            paths:
-              - node_modules
-            key: v1-dependencies-{{ checksum "package.json" }}
-
-        - run:
-            name: Login into Expo
-            command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-
-        - run:
-            name: Publish to Expo
-            command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel <<parameters.release_channel>>
+      build_command:
+        steps:
+          - checkout
+          # Download and cache dependencies
+          - restore_cache:
+              keys:
+              - v1-dependencies-{{ checksum "package.json" }}
+              # fallback to using the latest cache if no exact match
+              - v1-dependencies-
+          - run: npm install
+          - save_cache:
+              paths:
+                - node_modules
+              key: v1-dependencies-{{ checksum "package.json" }}
+      expo_command:
+        steps:
+          - run:
+              name: Login into Expo
+              command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+          - run:
+              name: Publish to Expo
+              command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel <<parameters.release_channel>>
 
 workflows:
   publish_to_expo:
