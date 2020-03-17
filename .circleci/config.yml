@@ -1,52 +1,55 @@
-version: 2
-publish: &publish
-  docker:
-    - image: circleci/node:13.10.1
-  steps:
-    - checkout
+version: 2.1
+description: Publish React Native apps to Expo
 
-    # Download and cache dependencies
-    - restore_cache:
-        keys:
-        - v1-dependencies-{{ checksum "package.json" }}
-        # fallback to using the latest cache if no exact match is found
-        - v1-dependencies-
+orbs:
+  expo_example:
+    jobs:
+      expo_job:
+        parameters: 
+          release_channel: 
+            description: which release channel
+            type: string
+            default: dev
+      steps:
+        - checkout
 
-    - run: npm install
+        # Download and cache dependencies
+        - restore_cache:
+            keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match
+            - v1-dependencies-
 
-    - save_cache:
-        paths:
-          - node_modules
-        key: v1-dependencies-{{ checksum "package.json" }}
+        - run: npm install
 
-    - run:
-        name: Login into Expo
-        command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+        - save_cache:
+            paths:
+              - node_modules
+            key: v1-dependencies-{{ checksum "package.json" }}
 
-    - run:
-        name: Publish to Expo
-        command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel $EXPO_RELEASE_CHANNEL
+        - run:
+            name: Login into Expo
+            command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
 
-jobs:
-  publish_to_expo_dev:
-    environment:
-      EXPO_RELEASE_CHANNEL: dev
-    <<: *publish
-
-  publish_to_expo_prod:
-    environment:
-      EXPO_RELEASE_CHANNEL: default
-    <<: *publish
+        - run:
+            name: Publish to Expo
+            command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel <<parameters.release_channel>>
+    executors:
+      docker:
+        - image: circleci/node:13.10.1
 
 workflows:
-  version: 2
   publish_to_expo:
     jobs:
-      - publish_to_expo_dev:
+      - expo_example/expo_job:
+          name: expo_dev
+          release_channel: dev
           filters:
             branches:
               only: development
-      - publish_to_expo_prod:
+      - expo_example/expo_job:
+          name: expo_prod
+          release_channel: default
           filters:
             branches:
               only: master
