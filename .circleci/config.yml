@@ -3,6 +3,9 @@ description: Publish React Native apps to Expo
 
 orbs:
   expo_example:
+    executors:
+      docker:
+        - image: circleci/node:13.10.1
     jobs:
       expo_job:
         parameters: 
@@ -10,6 +13,7 @@ orbs:
             description: which release channel
             type: string
             default: dev
+    commands:
       steps:
         - checkout
 
@@ -34,9 +38,6 @@ orbs:
         - run:
             name: Publish to Expo
             command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel <<parameters.release_channel>>
-    executors:
-      docker:
-        - image: circleci/node:13.10.1
 
 workflows:
   publish_to_expo:
