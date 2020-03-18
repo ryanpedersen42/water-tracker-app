@@ -4,12 +4,18 @@ description: Publish React Native apps to Expo
 orbs:
   expo_example:
     jobs:
-      expo_job:
+      expo_dev_job:
         executor: expo_node_executor
         steps:
           - build_command
           - expo_command:
               release_channel: dev
+      expo_prod_job:
+        executor: expo_node_executor
+        steps:
+          - build_command
+          - expo_command:
+              release_channel: default
     commands:
       parameters:
         release_channel: 
@@ -45,12 +51,12 @@ orbs:
 workflows:
   publish_to_expo:
     jobs:
-      - expo_example/expo_job:
+      - expo_example/expo_dev_job:
           name: expo_dev
           filters:
             branches:
               only: development
-      - expo_example/expo_job:
+      - expo_example/expo_prod_job:
           name: expo_prod
           filters:
             branches:
