@@ -41,25 +41,8 @@ orbs:
               name: expo login
               command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           - run:
-              name: publish
-              command: npx expo-cli publish --release-channel development --non-interactive
-          - run:
-              name: build iOS app
-              command: |
-                npx expo-cli build:ios --release-channel development --non-interactive --no-publish &&
-                curl -o app.ipa "$(expo url:ipa --non-interactive)" &&
-                fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
-
-          - run:
               name: expo build iOS
               command: npx expo-cli build:ios --non-interactive
-              no_output_timeout: 30m
-
-          # - run:
-          #     name: expo build Android
-          #     command: npx expo-cli build:android --non-interactive
-          #     no_output_timeout: 30m
-
           - run:
               name: publish to expo
               command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
