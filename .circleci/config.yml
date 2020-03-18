@@ -15,6 +15,11 @@ orbs:
 
     commands:
       expo_build_command:
+      description: building and sending to expo
+      parameters:
+        release_channel:
+          type: string
+          default: default
         steps:
           - checkout
           - restore_cache:
@@ -31,7 +36,7 @@ orbs:
               command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           - run:
               name: publish to expo
-              command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel $EXPO_RELEASE_CHANNEL
+              command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
 
 workflows:
   publish_to_expo:
@@ -41,4 +46,3 @@ workflows:
           filters:
             branches:
               only: development
-      # - expo_orb/
