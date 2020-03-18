@@ -8,6 +8,7 @@ orbs:
         parameters:
           release_channel: 
             type: string
+            default: dev
         steps:
           - build_command
           - expo_command
@@ -35,11 +36,12 @@ orbs:
           - run:
               name: Publish to Expo
               command: | 
-                npx expo-cli publish --non-interactive --max-workers 1 --release-channel <<parameters.release_channel>>
+                npx expo-cli publish --non-interactive --max-workers 1 --release-channel dev
     executors:
       expo_node_executor:
         docker:
           - image: circleci/node:13.10.1
+          # <<parameters.release_channel>>
 
 workflows:
   publish_to_expo:
