@@ -7,7 +7,6 @@ orbs:
       expo_job:
         parameters: 
           release_channel: 
-            description: which release channel
             type: string
             default: dev
         steps:
