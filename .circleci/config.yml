@@ -8,7 +8,6 @@ orbs:
         parameters: 
           release_channel: 
             type: string
-            default: dev
         steps:
           - build_command
           - expo_command
