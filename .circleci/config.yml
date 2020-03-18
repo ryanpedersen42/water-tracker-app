@@ -19,7 +19,7 @@ orbs:
       parameters:
         release_channel:
           type: string
-          default: default
+          default: "default"
         steps:
           - checkout
           - restore_cache:
