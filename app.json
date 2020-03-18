@@ -3,7 +3,6 @@
     "name": "water-consumption-app-rp",
     "slug": "water-app",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android"
@@ -26,7 +25,7 @@
       "bundleIdentifier": "com.rpd42.waterapp",
       "supportsTablet": true,
       "buildNumber": "1.0.0"
-    }, 
+    },
     "android": {
       "package": "com.rpd42.water_app",
       "adaptiveIcon": {
