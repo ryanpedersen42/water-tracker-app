@@ -15,11 +15,11 @@ orbs:
 
     commands:
       expo_build_command:
-      description: building and sending to expo
-      parameters:
-        release_channel:
-          type: string
-          default: "default"
+        description: building and sending to expo
+        parameters:
+          release_channel:
+            type: string
+            default: "default"
         steps:
           - checkout
           - restore_cache:
