@@ -1,52 +1,59 @@
-version: 2
-publish: &publish
-  docker:
-    - image: circleci/node:13.10.1
-  steps:
-    - checkout
+version: 2.1
+description: Expo for React Native
 
-    # Download and cache dependencies
-    - restore_cache:
-        keys:
-        - v1-dependencies-{{ checksum "package.json" }}
-        # fallback to using the latest cache if no exact match is found
-        - v1-dependencies-
+orbs:
+  expo_orb:
+    executors:
+      expo_executor:
+        docker:
+          - image: circleci/node:13.10.1
+    jobs:
+      expo_dev_job:
+        executor: expo_executor
+        steps:
+          - expo_build_command:
+              release_channel: "dev"
+      expo_default_job:
+        executor: expo_executor
+        steps:
+          - expo_build_command:
+              release_channel: "default"
 
-    - run: npm install
-
-    - save_cache:
-        paths:
-          - node_modules
-        key: v1-dependencies-{{ checksum "package.json" }}
-
-    - run:
-        name: Login into Expo
-        command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-
-    - run:
-        name: Publish to Expo
-        command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel $EXPO_RELEASE_CHANNEL
-
-jobs:
-  publish_to_expo_dev:
-    environment:
-      EXPO_RELEASE_CHANNEL: dev
-    <<: *publish
-
-  publish_to_expo_prod:
-    environment:
-      EXPO_RELEASE_CHANNEL: default
-    <<: *publish
+    commands:
+      expo_build_command:
+        description: building and sending to expo
+        parameters:
+          release_channel:
+            type: string
+            default: "default"
+        steps:
+          - checkout
+          - restore_cache:
+              keys:
+                - v1-dependencies-{{ checksum "package.json" }}
+                - v1-dependencies-
+          - run: npm install
+          - save_cache:
+              paths:
+                - node_modules
+              key: v1-dependencies-{{ checksum "package.json" }}
+          - run:
+              name: expo login
+              command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+          - run:
+              name: publish to expo
+              command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
 
 workflows:
-  version: 2
   publish_to_expo:
     jobs:
-      - publish_to_expo_dev:
+      - expo_orb/expo_dev_job:
+          name: expo_dev
           filters:
             branches:
               only: development
-      - publish_to_expo_prod:
+      - expo_orb/expo_default_job:
+          name: expo_default
           filters:
             branches:
               only: master

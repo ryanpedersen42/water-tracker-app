@@ -24,52 +24,6 @@ const fetchFonts = () => {
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
 
-  // useEffect(() => {
-  //   checkDate()
-  // }, []);
-  
-  // const dispatch = useDispatch()
-
-  // const checkDate = async () => {
-  //   let storedDate = await getStoredDate()
-  //   let currentDateString = moment().format("MMM Do YY")
-
-  //   if (storedDate) {
-  //     if (moment(currentDateString).isAfter(storedDate)) {
-  //       try {
-  //         await AsyncStorage.setItem('storedDate', currentDateString)
-  //         await dispatch(resetDailyConsumption())
-  //       } catch(err) {
-  //         console.log(err)
-  //       }
-  //     } 
-  //   } else {
-  //     try {
-  //       await AsyncStorage.setItem('storedDate', currentDateString)
-  //     } catch(err) {
-  //       console.log(err)
-  //     }
-  //   }
-
-  // //   if (currentDateString < date2) {
-  // //     console.log('greater')
-  // //   } else {
-  // //     console.log('not')
-  // //   }
-  // //   await console.log(currentDateString)
-  // }
-
-  // const getStoredDate = async () => {
-  //   const storedDate = await AsyncStorage.getItem('storedDate')
-
-  //   if (!storedDate) {
-  //     const newDate = await moment().format("MMM Do YY");
-  //     AsyncStorage.setItem('storedDate', JSON.stringify(newDate))
-  //   } else {
-  //     return storedDate;
-  //   }
-  // }
-
   if (!fontLoaded) {
     return (
       <AppLoading
