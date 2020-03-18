@@ -33,12 +33,10 @@ orbs:
         steps:
           - run:
               name: Login into Expo
-              command: |
-                npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+              command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           - run:
               name: Publish to Expo
-              command: | 
-                npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
+              command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
     executors:
       expo_node_executor:
         docker:
