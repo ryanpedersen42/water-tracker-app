@@ -5,7 +5,7 @@ orbs:
   expo_example:
     jobs:
       expo_job:
-        parameters: 
+        parameters:
           release_channel: 
             type: string
         steps:
@@ -30,10 +30,12 @@ orbs:
         steps:
           - run:
               name: Login into Expo
-              command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+              command: |
+                npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           - run:
               name: Publish to Expo
-              command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel <<parameters.release_channel>>
+              command: | 
+                npx expo-cli publish --non-interactive --max-workers 1 --release-channel <<parameters.release_channel>>
     executors:
       expo_node_executor:
         docker:
@@ -44,7 +46,7 @@ workflows:
     jobs:
       - expo_example/expo_job:
           name: expo_dev
-          release_channel: "dev"
+          release_channel: dev
           filters:
             branches:
               only: development
