@@ -10,10 +10,9 @@ orbs:
             type: string
         executor: expo_node_executor
         steps:
-          - build_command
           - expo_command
     commands:
-      build_command:
+      expo_command:
         steps:
           - checkout
           # Download and cache dependencies
@@ -27,8 +26,6 @@ orbs:
               paths:
                 - node_modules
               key: v1-dependencies-{{ checksum "package.json" }}
-      expo_command:
-        steps:
           - run:
               name: Login into Expo
               command: |
