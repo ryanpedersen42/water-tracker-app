@@ -43,9 +43,13 @@ orbs:
           - run:
               name: expo build iOS
               command: npx expo-cli build:ios --non-interactive
+                timeout: 1200
+
           - run:
               name: expo build Android
               command: npx expo-cli build:android --non-interactive
+                timeout: 1200
+
           - run:
               name: publish to expo
               command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
