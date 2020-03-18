@@ -42,7 +42,7 @@ orbs:
               command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           - run:
               name: expo build iOS
-              command: npx expo-cli build:ios
+              command: npx expo-cli build:ios --non-interactive
           # - run:
           #     name: publish to expo
           #     command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
