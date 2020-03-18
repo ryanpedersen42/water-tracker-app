@@ -42,11 +42,11 @@ orbs:
               command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           - run:
               name: publish
-              command: expo publish --release-channel development --non-interactive
+              command: npx expo-cli publish --release-channel development --non-interactive
           - run:
               name: build iOS app
               command: |
-                expo build:ios --release-channel development --non-interactive --no-publish &&
+                npx expo-cli build:ios --release-channel development --non-interactive --no-publish &&
                 curl -o app.ipa "$(expo url:ipa --non-interactive)" &&
                 fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
 
