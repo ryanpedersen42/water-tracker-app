@@ -42,10 +42,13 @@ orbs:
               command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           - run:
               name: expo build iOS
-              command: npx expo-cli build:ios --non-interactive -u $APPLE_UN -p $APPLE_PW
-          # - run:
-          #     name: publish to expo
-          #     command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
+              command: npx expo-cli build:ios --non-interactive
+          - run:
+              name: expo build Android
+              command: npx expo-cli build:android --non-interactive
+          - run:
+              name: publish to expo
+              command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
 
 workflows:
   publish_to_expo:
