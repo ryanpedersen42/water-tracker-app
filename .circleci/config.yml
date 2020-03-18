@@ -9,6 +9,7 @@ orbs:
           release_channel: 
             type: string
             default: dev
+        executor: expo_node_executor
         steps:
           - build_command
           - expo_command
