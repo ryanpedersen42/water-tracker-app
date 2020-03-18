@@ -47,13 +47,11 @@ workflows:
     jobs:
       - expo_example/expo_job:
           name: expo_dev
-          release_channel: dev
           filters:
             branches:
               only: development
       - expo_example/expo_job:
           name: expo_prod
-          release_channel: default
           filters:
             branches:
               only: master
