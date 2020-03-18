@@ -47,8 +47,13 @@ orbs:
 workflows:
   publish_to_expo:
     jobs:
-      - expo_orb/expo_job:
+      - expo_orb/expo_dev_job:
           name: expo_dev
           filters:
             branches:
               only: development
+      - expo_orb/expo_default_job:
+          name: expo_default
+          filters:
+            branches:
+              only: master
