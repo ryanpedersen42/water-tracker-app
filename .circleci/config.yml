@@ -5,15 +5,15 @@ orbs:
   expo_example:
     jobs:
       expo_job:
-        parameters:
-          release_channel: 
-            type: string
-            default: dev
         executor: expo_node_executor
         steps:
           - build_command
           - expo_command
     commands:
+      parameters:
+        release_channel: 
+          type: string
+          default: dev
       build_command:
         steps:
           - checkout
@@ -37,7 +37,7 @@ orbs:
           - run:
               name: Publish to Expo
               command: | 
-                npx expo-cli publish --non-interactive --max-workers 1 --release-channel << expo_example.jobs.expo_job.parameters.release_channel >>
+                npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
     executors:
       expo_node_executor:
         docker:
