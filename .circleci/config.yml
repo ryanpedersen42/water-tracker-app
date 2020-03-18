@@ -8,10 +8,16 @@ orbs:
         docker:
           - image: circleci/node:13.10.1
     jobs:
-      expo_job:
+      expo_dev_job:
         executor: expo_executor
         steps:
-          - expo_build_command
+          - expo_build_command:
+              release_channel: "dev"
+      expo_default_job:
+        executor: expo_executor
+        steps:
+          - expo_build_command:
+              release_channel: "default"
 
     commands:
       expo_build_command:
@@ -43,7 +49,6 @@ workflows:
     jobs:
       - expo_orb/expo_job:
           name: expo_dev
-          release_channel: "dev"
           filters:
             branches:
               only: development
