@@ -44,7 +44,7 @@ workflows:
     jobs:
       - expo_example/expo_job:
           name: expo_dev
-          release_channel: dev
+          release_channel: "dev"
           filters:
             branches:
               only: development
