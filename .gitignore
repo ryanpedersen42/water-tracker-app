@@ -12,4 +12,3 @@ web-report/
 
 # macOS
 .DS_Store
-*api_key.json

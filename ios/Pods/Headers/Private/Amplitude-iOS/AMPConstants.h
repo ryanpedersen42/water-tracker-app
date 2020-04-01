@@ -1,1 +1,0 @@
-../../../Amplitude-iOS/Sources/Amplitude/AMPConstants.h

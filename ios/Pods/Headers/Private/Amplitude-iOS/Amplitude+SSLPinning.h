@@ -1,1 +1,0 @@
-../../../Amplitude-iOS/Sources/Amplitude/Amplitude+SSLPinning.h
