@@ -16,15 +16,29 @@
 default_platform(:ios)
 
 platform :ios do
-
-  ############################## PRELANE ##############################
-
-  before_all do
-    setup_circle_ci
+  desc "push new build to testflight"
+  lane :beta do 
+    match(type: "appstore")
+    build_app(scheme: "water-consumption-app-rp")
+    upload_to_testflight
+  end
+  lane :prod do 
+      deliver(
+        build_number: latest_testflight_build_number.to_s,
+        submit_for_review: false,
+        automatic_release: false,
+        force: true, # Skip HTMl report verification
+        skip_metadata: false,
+        skip_screenshots: true,
+        skip_binary_upload: true
+      )
 
   desc "Push a new release build to the App Store"
   lane :release do
     build_app(workspace: "water-consumption-app-rp.xcworkspace", scheme: "water-consumption-app-rp")
     upload_to_app_store
+  end
+  lane :prod do 
+
   end
 end

@@ -1,10 +1,10 @@
-git_url("https://github.com/ryanpedersen42/water-tracker-app-certificates.git")
+git_url("git@github.com:ryanpedersen42/water-tracker-app-certificates.git")
 
 storage_mode("git")
 
 type("development") # The default type, can be: appstore, adhoc, enterprise or development
 
-# app_identifier(["tools.fastlane.app", "tools.fastlane.app2"])
+app_identifier("com.rpd42.waterapp")
 # username("user@fastlane.tools") # Your Apple Developer Portal username
 
 # For all available options run `fastlane match --help`
