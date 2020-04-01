@@ -58,7 +58,12 @@ jobs:
       - restore_cache:
           key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
 
-      - run: bundle install
+      - run: 
+          name: install bundler
+          command: |
+            gem update --system
+            gem install bundler
+            bundle install
 
       - save_cache:
           key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
@@ -84,7 +89,12 @@ jobs:
       - restore_cache:
           key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
 
-      - run: bundle install
+      - run: 
+          name: install bundler
+          command: |
+            gem update --system
+            gem install bundler
+            bundle install
 
       - save_cache:
           key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
@@ -137,7 +147,10 @@ jobs:
           key: node-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
 
       - run:
-          command: bundle install
+          command: |
+            gem update --system
+            gem install bundler
+            bundle install
           working_directory: ios
 
       - save_cache:
@@ -191,7 +204,11 @@ jobs:
           key: node-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
 
       - run:
-          command: bundle install
+          name: install bundler
+          command: |
+            gem update --system
+            gem install bundler
+            bundle install          
           working_directory: ios
 
       - save_cache:
