@@ -9,7 +9,7 @@ orbs:
           - image: circleci/node:13.10.1
       fastlane_executor:
         macos:
-          xcode: "11.3"
+          xcode: 11.3
 
     jobs:
       expo_dev_job:
