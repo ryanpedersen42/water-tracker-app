@@ -1,87 +1,44 @@
 version: 2.1
-description: Expo for React Native
+jobs:
+  build-and-test:
+    macos:
+      xcode: 11.3.0
+    environment:
+      FL_OUTPUT_DIR: output
+      FASTLANE_LANE: test
+    steps:
+      - checkout
+      - run: bundle install
+      - run:
+          name: Fastlane
+          command: bundle exec fastlane $FASTLANE_LANE
+      - store_artifacts:
+          path: output
+      - store_test_results:
+          path: output/scan
 
-orbs:
-  expo_orb:
-    executors:
-      expo_executor:
-        docker:
-          - image: circleci/node:13.10.1
-      fastlane_executor:
-        macos:
-          xcode: 11.3.0
-
-    jobs:
-      expo_dev_job:
-        executor: expo_executor
-        steps:
-          - expo_build_command:
-              release_channel: "dev"
-      expo_default_job:
-        executor: expo_executor
-        steps:
-          - expo_build_command:
-              release_channel: "default"
-      fastlane_job:
-        executor: fastlane_executor
-        environment:
-          FL_OUTPUT_DIR: output
-          FASTLANE_LANE: test
-        working_directory: ~/ios
-
-    commands:
-      fastlane_command:
-        steps:
-          - checkout
-          - restore_cache:
-              key: 1-gems-{{ checksum "Gemfile.lock" }}
-          - run: bundle check || bundle install --path vendor/bundle
-          - save_cache:
-              key: 1-gems-{{ checksum "Gemfile.lock" }}
-              paths:
-                - vendor/bundle
-          - run:
-              name: fastlane
-              command: bundle exec fastlane $FASTLANE_LANE
-          - store_artifacts:
-              path: output
-          - store_test_results:
-              path: output/scan
-
-      expo_build_command:
-        description: building and sending to expo
-        parameters:
-          release_channel:
-            type: string
-            default: "default"
-        steps:
-          - checkout
-          - restore_cache:
-              keys:
-                - v1-dependencies-{{ checksum "package.json" }}
-                - v1-dependencies-
-          - run: npm install
-          - save_cache:
-              paths:
-                - node_modules
-              key: v1-dependencies-{{ checksum "package.json" }}
-          - run:
-              name: expo login
-              command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-          - run:
-              name: publish to expo
-              command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
+  adhoc:
+    macos:
+      xcode: 11.3.0
+    environment:
+      FL_OUTPUT_DIR: output
+      FASTLANE_LANE: adhoc
+    steps:
+      - checkout
+      - run: bundle install
+      - run:
+          name: Fastlane
+          command: bundle exec fastlane $FASTLANE_LANE
+      - store_artifacts:
+          path: output
 
 workflows:
-  publish_to_expo:
+  build-test-adhoc:
     jobs:
-      - expo_orb/expo_dev_job:
-          name: expo_dev
+      - build-and-test
+      - adhoc:
           filters:
             branches:
               only: development
-      - expo_orb/expo_default_job:
-          name: expo_default
-          filters:
-            branches:
-              only: master
+          requires:
+            - build-and-test
