@@ -1,0 +1,11 @@
+CONFIGURATION_BUILD_DIR = ${PODS_CONFIGURATION_BUILD_DIR}/ExpoKit
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Crashlytics/iOS" "${PODS_ROOT}/FBAudienceNetwork/Static" "${PODS_ROOT}/Fabric/iOS" "${PODS_ROOT}/GoogleMaps/Base/Frameworks" "${PODS_ROOT}/GoogleMaps/Maps/Frameworks" "${PODS_ROOT}/GoogleSignIn/Frameworks"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/ExpoKit" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/Amplitude-iOS" "${PODS_ROOT}/Headers/Public/Analytics" "${PODS_ROOT}/Headers/Public/AppAuth" "${PODS_ROOT}/Headers/Public/Branch" "${PODS_ROOT}/Headers/Public/CocoaLumberjack" "${PODS_ROOT}/Headers/Public/DoubleConversion" "${PODS_ROOT}/Headers/Public/ExpoKit" "${PODS_ROOT}/Headers/Public/FBSDKCoreKit" "${PODS_ROOT}/Headers/Public/FBSDKLoginKit" "${PODS_ROOT}/Headers/Public/GTMAppAuth" "${PODS_ROOT}/Headers/Public/GTMSessionFetcher" "${PODS_ROOT}/Headers/Public/Google-Maps-iOS-Utils" "${PODS_ROOT}/Headers/Public/JKBigInteger2" "${PODS_ROOT}/Headers/Public/React" "${PODS_ROOT}/Headers/Public/UMCameraInterface" "${PODS_ROOT}/Headers/Public/UMConstantsInterface" "${PODS_ROOT}/Headers/Public/UMCore" "${PODS_ROOT}/Headers/Public/UMFileSystemInterface" "${PODS_ROOT}/Headers/Public/UMFontInterface" "${PODS_ROOT}/Headers/Public/UMPermissionsInterface" "${PODS_ROOT}/Headers/Public/UMReactNativeAdapter" "${PODS_ROOT}/Headers/Public/UMSensorsInterface" "${PODS_ROOT}/Headers/Public/glog" "${PODS_ROOT}/Headers/Public/lottie-ios" "${PODS_ROOT}/Headers/Public/yoga"
+PODS_BUILD_DIR = ${BUILD_DIR}
+PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_ROOT = ${SRCROOT}
+PODS_TARGET_SRCROOT = ${PODS_ROOT}/ExpoKit
+PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
+SKIP_INSTALL = YES
+USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES
