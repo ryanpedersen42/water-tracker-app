@@ -241,11 +241,11 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-        - ios-prod:
-            requires:
-              - ios-hold
-            filters:
-              tags:
-                only: /^v.*/
-              branches:
-                ignore: /.*/
+      - ios-prod:
+          requires:
+            - ios-hold
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
