@@ -211,41 +211,41 @@ workflows:
           type: approval
       - ios-hold:
           type: approval
-      - node:
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+      - node
+          # filters:
+          #   tags:
+          #     only: /^v.*/
+          #   branches:
+          #     ignore: /.*/
       - android-alpha:
           requires:
             - node
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+          # filters:
+          #   tags:
+          #     only: /^v.*/
+          #   branches:
+          #     ignore: /.*/
       - android-beta:
           requires:
             - android-hold
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+          # filters:
+          #   tags:
+          #     only: /^v.*/
+          #   branches:
+          #     ignore: /.*/
       - ios-beta:
           requires:
             - node
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+          # filters:
+          #   tags:
+          #     only: /^v.*/
+          #   branches:
+          #     ignore: /.*/
       - ios-prod:
           requires:
             - ios-hold
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+          # filters:
+          #   tags:
+          #     only: /^v.*/
+          #   branches:
+          #     ignore: /.*/
