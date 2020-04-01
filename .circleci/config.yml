@@ -220,7 +220,7 @@ workflows:
       - android-alpha:
           requires:
             - node
-            filters:
+          filters:
             tags:
               only: /^v.*/
             branches:
@@ -228,7 +228,7 @@ workflows:
       - android-beta:
           requires:
             - android-hold
-            filters:
+          filters:
             tags:
               only: /^v.*/
             branches:
