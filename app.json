@@ -3,7 +3,6 @@
     "name": "water-consumption-app-rp",
     "slug": "water-app",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android"
@@ -25,9 +24,7 @@
     "ios": {
       "bundleIdentifier": "com.rpd42.waterapp",
       "supportsTablet": true,
-      "buildNumber": "1.0.0",
-      "publishBundlePath": "ios/water-consumption-app-rp/Supporting/shell-app.bundle",
-      "publishManifestPath": "ios/water-consumption-app-rp/Supporting/shell-app-manifest.json"
+      "buildNumber": "1.0.0"
     },
     "android": {
       "package": "com.rpd42.water_app",
@@ -36,15 +33,7 @@
         "backgroundColor": "#625C66"
       },
       "permissions": [],
-      "versionCode": 1,
-      "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
-      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
-    },
-    "isDetached": true,
-    "detach": {
-      "iosExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/ios-v2.13.0-sdk35.0.0-a30ebc9b-3db4-42f4-b677-e468076baf18.tar.gz",
-      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v119-sdk35.0.0-6758e9de-1e10-40f8-863d-ec8972895cf1.tar.gz"
-    },
-    "scheme": "expd9ce13cede6d43fba76874e9aff5acf0"
+      "versionCode": 1
+    }
   }
 }

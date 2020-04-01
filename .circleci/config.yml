@@ -1,268 +1,68 @@
-version: 2
-jobs:
-  node:
-    working_directory: ~/demo-react-native
-    docker:
-      - image: circleci/node:8
-    steps:
-      - checkout
+version: 2.1
+description: Expo for React Native
 
-      - restore_cache:
-          key: npm-v1-{{ checksum "package.lock.json" }}-{{ arch }}
+orbs:
+  expo_orb:
+    executors:
+      expo_executor:
+        docker:
+          - image: circleci/node:13.10.1
+    jobs:
+      expo_dev_job:
+        executor: expo_executor
+        steps:
+          - expo_build_command:
+              release_channel: "dev"
+      expo_default_job:
+        executor: expo_executor
+        steps:
+          - expo_build_command:
+              release_channel: "default"
 
-      - restore_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+    commands:
+      expo_build_command:
+        description: building and sending to expo
+        parameters:
+          release_channel:
+            type: string
+            default: "default"
+        steps:
+          - checkout
+          - restore_cache:
+              keys:
+                - v1-dependencies-{{ checksum "package.json" }}
+                - v1-dependencies-
+          - run: npm install
+          - save_cache:
+              paths:
+                - node_modules
+              key: v1-dependencies-{{ checksum "package.json" }}
+          - run:
+              name: expo login
+              command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+          - run:
+              name: expo build iOS
+              command: npx expo-cli build:ios --non-interactive
+              no_output_timeout: 60m
+          - run:
+              name: expo build Android
+              command: npx expo-cli build:android --non-interactive
+              no_output_timeout: 60m
 
-      - run: npm install
-
-      - save_cache:
-          key: npm-v1-{{ checksum "package.lock.json" }}-{{ arch }}
-          paths:
-            - ~/.cache/npm
-
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-          paths:
-            - node_modules
-
-      - run:
-          name: jest tests
-          command: |
-            mkdir -p test-results/jest
-            npm run test
-          environment:
-            JEST_JUNIT_OUTPUT: test-results/jest/junit.xml
-
-      - persist_to_workspace:
-          root: ~/demo-react-native
-          paths:
-            - node_modules
-
-      - store_test_results:
-          path: test-results
-
-      - store_artifacts:
-          path: test-results
-
-  android-alpha:
-    working_directory: ~/demo-react-native/android
-    docker:
-      - image: circleci/android:api-28-node8-alpha
-    steps:
-      - checkout:
-          path: ~/demo-react-native
-
-      - attach_workspace:
-          at: ~/demo-react-native
-
-      - restore_cache:
-          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
-
-      - run: 
-          name: install bundler
-          command: |
-            gem update --system
-            gem install bundler
-            bundle install
-
-      - save_cache:
-          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
-          paths:
-            - vendor/bundle
-
-      - run:
-          name: fastlane android alpha
-          command: |
-            bundle exec fastlane alpha
-
-  android-beta:
-    working_directory: ~/demo-react-native/android
-    docker:
-      - image: circleci/android:api-28-node8-alpha
-    steps:
-      - checkout:
-          path: ~/demo-react-native
-
-      - attach_workspace:
-          at: ~/demo-react-native
-
-      - restore_cache:
-          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
-
-      - run: 
-          name: install bundler
-          command: |
-            gem update --system
-            gem install bundler
-            bundle install
-
-      - save_cache:
-          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
-          paths:
-            - vendor/bundle
-
-      - run:
-          name: fastlane android beta
-          command: |
-            bundle exec fastlane beta
-      # - store_artifacts:
-      #     path: test-results
-
-  ios-beta:
-    macos:
-      xcode: "9.0"
-    working_directory: ~/demo-react-native
-
-    # use a --login shell so our "set Ruby version" command gets picked up for later steps
-    shell: /bin/bash --login -o pipefail
-
-    steps:
-      - checkout
-
-      - run:
-          name: set Ruby version
-          command:  echo "ruby-2.4" > ~/.ruby-version
-
-      - restore_cache:
-          key: npm-v1-{{ checksum "package.lock.json" }}-{{ arch }}
-
-      - restore_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-
-      # not using a workspace here as Node and Yarn versions
-      # differ between our macOS executor image and the Docker containers above
-      - run: npm install
-
-      - save_cache:
-          key: npm-v1-{{ checksum "package.lock.json" }}-{{ arch }}
-          paths:
-            - ~/.cache/npm
-
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-          paths:
-            - node_modules
-
-      - restore_cache:
-          key: node-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
-
-      - run:
-          command: |
-            gem update --system
-            gem install bundler
-            bundle install
-          working_directory: ios
-
-      - save_cache:
-          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
-          paths:
-            - vendor/bundle
-
-      - run:
-          command: bundle exec fastlane beta
-          working_directory: ios
-
-      # - store_artifacts:
-      #     path: ios/test-results
-
-  ios-prod:
-    macos:
-      xcode: "9.0"
-    working_directory: ~/demo-react-native
-
-    # use a --login shell so our "set Ruby version" command gets picked up for later steps
-    shell: /bin/bash --login -o pipefail
-
-    steps:
-      - checkout
-
-      - run:
-          name: set Ruby version
-          command:  echo "ruby-2.4" > ~/.ruby-version
-
-      - restore_cache:
-          key: npm-v1-{{ checksum "package.lock.json" }}-{{ arch }}
-
-      - restore_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-
-      # not using a workspace here as Node and Yarn versions
-      # differ between our macOS executor image and the Docker containers above
-      - run: npm install
-
-      - save_cache:
-          key: npm-v1-{{ checksum "package.lock.json" }}-{{ arch }}
-          paths:
-            - ~/.cache/npm
-
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-          paths:
-            - node_modules
-
-      - restore_cache:
-          key: node-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
-
-      - run:
-          name: install bundler
-          command: |
-            gem update --system
-            gem install bundler
-            bundle install          
-          working_directory: ios
-
-      - save_cache:
-          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
-          paths:
-            - vendor/bundle
-
-      - run:
-          command: bundle exec fastlane prod
-          working_directory: ios
+          - run:
+              name: publish to expo
+              command: npx expo-cli publish --non-interactive --max-workers 1 --release-channel << parameters.release_channel >>
 
 workflows:
-  version: 2
-  node-android-ios:
+  publish_to_expo:
     jobs:
-      - android-hold:
-          type: approval
-      - ios-hold:
-          type: approval
-      - node
-          # filters:
-          #   tags:
-          #     only: /^v.*/
-          #   branches:
-          #     ignore: /.*/
-      - android-alpha:
-          requires:
-            - node
-          # filters:
-          #   tags:
-          #     only: /^v.*/
-          #   branches:
-          #     ignore: /.*/
-      - android-beta:
-          requires:
-            - android-hold
-          # filters:
-          #   tags:
-          #     only: /^v.*/
-          #   branches:
-          #     ignore: /.*/
-      - ios-beta:
-          requires:
-            - node
-          # filters:
-          #   tags:
-          #     only: /^v.*/
-          #   branches:
-          #     ignore: /.*/
-      - ios-prod:
-          requires:
-            - ios-hold
-          # filters:
-          #   tags:
-          #     only: /^v.*/
-          #   branches:
-          #     ignore: /.*/
+      - expo_orb/expo_dev_job:
+          name: expo_dev
+          filters:
+            branches:
+              only: development
+      - expo_orb/expo_default_job:
+          name: expo_default
+          filters:
+            branches:
+              only: master
