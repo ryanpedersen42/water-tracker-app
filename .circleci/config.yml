@@ -46,8 +46,8 @@ orbs:
           - run:
               name: build iOS app
               command: |
-                npx expo-cli build:ios --release-channel development --non-interactive --no-publish &&
-                fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
+                npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
+                # fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
 
           - run:
               name: expo build iOS
