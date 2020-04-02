@@ -47,7 +47,6 @@ orbs:
               name: build iOS app
               command: |
                 npx expo-cli build:ios --release-channel development --non-interactive --no-publish &&
-                curl -o app.ipa "$(expo url:ipa --non-interactive)" &&
                 fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
 
           - run:
