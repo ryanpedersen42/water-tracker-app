@@ -40,9 +40,9 @@ orbs:
           - run:
               name: expo login
               command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-          - run:
-              name: publish
-              command: npx expo-cli publish --release-channel development --non-interactive
+          # - run:
+          #     name: publish
+          #     command: npx expo-cli publish --release-channel development --non-interactive
           - run:
               name: build iOS app
               command: |
