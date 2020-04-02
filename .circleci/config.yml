@@ -1,5 +1,5 @@
 version: 2.1
-description: Expo for React Native
+description: Expo setup for React Native
 
 orbs:
   expo_orb:
