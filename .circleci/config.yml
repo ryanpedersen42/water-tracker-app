@@ -92,3 +92,8 @@ workflows:
           filters:
             branches:
               only: master
+      - expo_orb/ios_job:
+          name: ios_default
+          filters:
+            branches:
+              only: inline
