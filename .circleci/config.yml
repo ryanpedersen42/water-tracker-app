@@ -23,7 +23,8 @@ orbs:
       ios_job:
         executor: ios_executor
         steps:
-          - ios_command
+          - expo_build_command:
+              release_channel: "default"
 
     commands:
       ios_command:
@@ -67,9 +68,14 @@ workflows:
           name: expo_dev
           filters:
             branches:
-              only: development
-      - expo_orb/expo_default_job:
-          name: expo_default
+              only: development      
+      - expo_orb/expo_dev_job:
+          name: expo_dev
           filters:
             branches:
-              only: master
+              only: development
+      - expo_orb/ios_job:
+        name: ios_job
+        steps:
+          - expo_build_command:
+              release_channel: "default"
