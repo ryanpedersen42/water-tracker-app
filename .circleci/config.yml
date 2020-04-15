@@ -1,71 +1,51 @@
 version: 2.1
 
-orbs:
-  expo_orb:
-    executors:
-      expo_executor:
-        docker:
-          - image: circleci/node:13.10.1
-      ios_executor:
-        macos:
-          xcode: 11.3.0
-    jobs:
-      expo_default_job:
-        executor: ios_executor
-        steps:
-          - build command
-          - expo_build_command:
-
-    commands:
-      build_command:
-        description: ios expo and fastlane 
-        steps:
-          - checkout 
-          - run:
-              name: update npm
-              command: 'sudo npm install -g npm@latest'
-          - restore_cache:
-              keys:
-                  # when lock file changes, use increasingly general patterns to restore cache
-                  - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-                  - node-v1-{{ .Branch }}-
-                  - node-v1-
-          - run:
-              name: Fetch dependencies
-              command: npm install
-          - save_cache:
-              paths:
-                  - node_modules  
-              key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-          - run:
-              name: expo login
-              command: | 
-                sudo npm install -g expo-cli
-                npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-          - run: 
-              name: publish expo 
-              command: | 
-                npx expo-cli publish --release-channel production --non-interactive
-
-          - run:
-              name: build iOS app
-              no_output_timeout: 30m
-              command: |
-                npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
-          - run:
-              name: get ipa 
-              command: |
-                curl -o app.ipa "$(expo url:ipa --non-interactive)"
-          - run:
-              name: fastlane deliver 
-              command: |
-                fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
+jobs:
+  main_job:
+    macos:
+      xcode: 11.3.0
+    steps:
+      - checkout 
+      - run:
+          name: update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          keys:
+              # when lock file changes, use increasingly general patterns to restore cache
+              - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+              - node-v1-{{ .Branch }}-
+              - node-v1-
+      - run:
+          name: Fetch dependencies
+          command: npm install
+      - save_cache:
+          paths:
+              - node_modules  
+          key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - run:
+          name: expo login
+          command: | 
+            sudo npm install -g expo-cli
+            npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+      - run: 
+          name: publish expo 
+          command: | 
+            npx expo-cli publish --release-channel production --non-interactive
+      - run:
+          name: build iOS app
+          no_output_timeout: 30m
+          command: |
+            npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
+      - run:
+          name: get ipa 
+          command: |
+            curl -o app.ipa "$(expo url:ipa --non-interactive)"
+      - run:
+          name: fastlane deliver 
+          command: |
+            fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
 
 workflows:
-  publish_to_expo:
+  main_workflow:
     jobs:   
-      - expo_orb/expo_dev_job:
-          name: expo_dev_job
-          filters:
-            branches:
-              only: inline
+      - main_job
