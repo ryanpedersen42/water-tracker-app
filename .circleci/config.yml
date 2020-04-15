@@ -35,7 +35,7 @@ jobs:
           name: build iOS app
           no_output_timeout: 30m
           command: |
-            npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
+            npx expo-cli build:ios --release-channel production --non-interactive --no-publish 
       - run:
           name: get ipa 
           command: |
