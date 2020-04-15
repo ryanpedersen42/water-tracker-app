@@ -24,7 +24,7 @@
     "ios": {
       "bundleIdentifier": "com.rpd42.waterapp",
       "supportsTablet": true,
-      "buildNumber": "1.0.1"
+      "buildNumber": "2"
     },
     "android": {
       "package": "com.rpd42.water_app",
