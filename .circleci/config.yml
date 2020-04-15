@@ -75,7 +75,7 @@ workflows:
             branches:
               only: development
       - expo_orb/ios_job:
-        name: ios_job
-        steps:
-          - expo_build_command:
-              release_channel: "default"
+          name: ios_job
+          steps:
+            - expo_build_command:
+                release_channel: "default"
