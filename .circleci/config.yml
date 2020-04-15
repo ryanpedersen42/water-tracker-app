@@ -25,13 +25,31 @@ orbs:
       ios_job:
         executor: ios_executor
         steps:
-          - ios_command
+          - build_command 
+          - expo_build_command
 
     commands:
-      ios_command:
+      build_command:
         description: ios expo and fastlane 
         steps:
-          - checkout
+          - checkout 
+          - run:
+              name: update npm
+              command: 'sudo npm install -g npm@latest'
+          - restore_cache:
+              keys:
+                  # when lock file changes, use increasingly general patterns to restore cache
+                  - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+                  - node-v1-{{ .Branch }}-
+                  - node-v1-
+          - run:
+              name: Fetch dependencies
+              command: npm install
+          - save_cache:
+              paths:
+                  - node_modules  
+              key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+
 
       expo_build_command:
         description: building and sending to expo
@@ -53,7 +71,7 @@ orbs:
                 npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
           - run:
               name: get ipa 
-              command: |
+              command:
                 curl -o app.ipa "$(expo url:ipa --non-interactive)"
 
           - run:
