@@ -41,15 +41,15 @@ orbs:
             default: "default"
         steps:
           - checkout
-          - restore_cache:
-              keys:
-                - v1-dependencies-{{ checksum "package.json" }}
-                - v1-dependencies-
-          - run: npm install
-          - save_cache:
-              paths:
-                - node_modules
-              key: v1-dependencies-{{ checksum "package.json" }}
+          # - restore_cache:
+          #     keys:
+          #       - v1-dependencies-{{ checksum "package.json" }}
+          #       - v1-dependencies-
+          # - run: npm install
+          # - save_cache:
+          #     paths:
+          #       - node_modules
+          #     key: v1-dependencies-{{ checksum "package.json" }}
           - run:
               name: expo login
               command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
