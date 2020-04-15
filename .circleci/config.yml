@@ -51,6 +51,9 @@ orbs:
               no_output_timeout: 30m
               command: |
                 npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
+          - run:
+              name: get ipa 
+              command: |
                 curl -o app.ipa "$(expo url:ipa --non-interactive)"
 
           - run:
