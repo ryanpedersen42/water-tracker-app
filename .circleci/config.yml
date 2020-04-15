@@ -10,28 +10,13 @@ orbs:
         macos:
           xcode: 11.3.0
     jobs:
-      expo_dev_job:
-        executor: ios_executor
-        steps:
-          - expo_build_command:
-              release_channel: "dev"
       expo_default_job:
         executor: ios_executor
         steps:
           - build command
           - expo_build_command:
-              release_channel: "default"
-      ios_job:
-        executor: ios_executor
-        steps:
-          - expo_build_command:
-              release_channel: "default"
 
     commands:
-      ios_command:
-        description: ios expo and fastlane 
-        steps:
-          - checkout
       build_command:
         description: ios expo and fastlane 
         steps:
@@ -52,31 +37,25 @@ orbs:
               paths:
                   - node_modules  
               key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-
-      expo_build_command:
-        description: building and sending to expo
-        parameters:
-          release_channel:
-            type: string
-            default: "default"
-        steps:
-          - checkout
           - run:
               name: expo login
               command: | 
                 sudo npm install -g expo-cli
                 npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+          - run: 
+              name: publish expo 
+              command: | 
+                npx expo-cli publish --release-channel production --non-interactive
+
           - run:
               name: build iOS app
               no_output_timeout: 30m
               command: |
-                npx expo-cli publish --release-channel production --non-interactive
                 npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
           - run:
               name: get ipa 
               command: |
                 curl -o app.ipa "$(expo url:ipa --non-interactive)"
-
           - run:
               name: fastlane deliver 
               command: |
@@ -84,14 +63,9 @@ orbs:
 
 workflows:
   publish_to_expo:
-    jobs:
+    jobs:   
       - expo_orb/expo_dev_job:
-          name: expo_dev
-          filters:
-            branches:
-              only: development      
-      - expo_orb/expo_dev_job:
-          name: expo_dev
+          name: expo_dev_job
           filters:
             branches:
               only: inline
