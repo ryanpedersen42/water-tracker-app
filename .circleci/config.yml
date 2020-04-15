@@ -18,6 +18,7 @@ orbs:
       expo_default_job:
         executor: ios_executor
         steps:
+          - build command
           - expo_build_command:
               release_channel: "default"
       ios_job:
@@ -31,6 +32,26 @@ orbs:
         description: ios expo and fastlane 
         steps:
           - checkout
+      build_command:
+        description: ios expo and fastlane 
+        steps:
+          - checkout 
+          - run:
+              name: update npm
+              command: 'sudo npm install -g npm@latest'
+          - restore_cache:
+              keys:
+                  # when lock file changes, use increasingly general patterns to restore cache
+                  - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+                  - node-v1-{{ .Branch }}-
+                  - node-v1-
+          - run:
+              name: Fetch dependencies
+              command: npm install
+          - save_cache:
+              paths:
+                  - node_modules  
+              key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
 
       expo_build_command:
         description: building and sending to expo
