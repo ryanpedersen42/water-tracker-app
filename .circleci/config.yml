@@ -7,19 +7,31 @@ orbs:
       expo_executor:
         docker:
           - image: circleci/node:13.10.1
+      ios_executor:
+        macos:
+          xcode: 11.3.0
     jobs:
       expo_dev_job:
-        executor: expo_executor
+        executor: ios_executor
         steps:
           - expo_build_command:
               release_channel: "dev"
       expo_default_job:
-        executor: expo_executor
+        executor: ios_executor
         steps:
           - expo_build_command:
               release_channel: "default"
+      ios_job:
+        executor: ios_executor
+        steps:
+          - ios_command
 
     commands:
+      ios_command:
+        description: ios expo and fastlane 
+        steps:
+          - checkout
+
       expo_build_command:
         description: building and sending to expo
         parameters:
@@ -44,7 +56,6 @@ orbs:
               name: build iOS app
               command: |
                 npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
-                sudo gem install fastlane -NV
                 fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
 
           - run:
