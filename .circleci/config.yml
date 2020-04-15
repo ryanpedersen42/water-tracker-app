@@ -41,15 +41,6 @@ orbs:
             default: "default"
         steps:
           - checkout
-          # - restore_cache:
-          #     keys:
-          #       - v1-dependencies-{{ checksum "package.json" }}
-          #       - v1-dependencies-
-          # - run: npm install
-          # - save_cache:
-          #     paths:
-          #       - node_modules
-          #     key: v1-dependencies-{{ checksum "package.json" }}
           - run:
               name: expo login
               command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
@@ -60,7 +51,7 @@ orbs:
                 npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
                 curl -o app.ipa "$(expo url:ipa --non-interactive)"
 
-          -run:
+          - run:
               name: fastlane deliver 
               command: |
                 fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
