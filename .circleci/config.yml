@@ -7,6 +7,7 @@ orbs:
       expo_executor:
         docker:
           - image: circleci/node:13.10.1
+      #ios here 
       ios_executor:
         macos:
           xcode: 11.3.0
