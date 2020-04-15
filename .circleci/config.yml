@@ -43,7 +43,9 @@ orbs:
           - checkout
           - run:
               name: expo login
-              command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+              command: | 
+                sudo npm install -g expo-cli
+                npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           - run:
               name: build iOS app
               no_output_timeout: 30m
