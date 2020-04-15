@@ -1,5 +1,72 @@
 version: 2.1
-description: Expo setup for React Native
+
+
+version: 2.1
+
+jobs:
+  unit_tests:
+    working_directory: ~/react-app
+    parallelism: 2
+    docker:
+      - image: circleci/node:13.10.1
+    steps:
+      - checkout
+      - run:
+          name: update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          keys:
+              # when lock file changes, use increasingly general patterns to restore cache
+              - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+              - node-v1-{{ .Branch }}-
+              - node-v1-
+      - run:
+          name: Fetch dependencies
+          command: npm install
+      - save_cache:
+          paths:
+              - node_modules  
+          key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - run: mkdir ~/junit
+      - run:
+          name: Test application 
+          command: npm test
+
+  deploy:
+    working_directory: ~/react-app
+    macos:
+      xcode: 11.3.0
+    steps:
+      - checkout
+
+
+
+workflows:
+  build_test_deploy:
+    jobs:
+      - build 
+      - unit_tests:
+          requires:
+            - build 
+      - snapshot_tests: 
+          requires:
+            - build    
+      - hold:
+          type: approval
+          requires:
+            - unit_tests
+            - snapshot_tests
+          filters:
+            branches:
+              only: master
+      - deploy:
+          requires:
+            - hold 
+          filters:
+            branches:
+              only: master
+
+
 
 orbs:
   expo_orb:
@@ -25,31 +92,13 @@ orbs:
       ios_job:
         executor: ios_executor
         steps:
-          - build_command 
-          - expo_build_command
+          - ios_command
 
     commands:
-      build_command:
+      ios_command:
         description: ios expo and fastlane 
         steps:
-          - checkout 
-          - run:
-              name: update npm
-              command: 'sudo npm install -g npm@latest'
-          - restore_cache:
-              keys:
-                  # when lock file changes, use increasingly general patterns to restore cache
-                  - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-                  - node-v1-{{ .Branch }}-
-                  - node-v1-
-          - run:
-              name: Fetch dependencies
-              command: npm install
-          - save_cache:
-              paths:
-                  - node_modules  
-              key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-
+          - checkout
 
       expo_build_command:
         description: building and sending to expo
@@ -68,10 +117,11 @@ orbs:
               name: build iOS app
               no_output_timeout: 30m
               command: |
+                npx expo-cli publish --release-channel production --non-interactive
                 npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
           - run:
               name: get ipa 
-              command:
+              command: |
                 curl -o app.ipa "$(expo url:ipa --non-interactive)"
 
           - run:
@@ -92,8 +142,3 @@ workflows:
           filters:
             branches:
               only: master
-      - expo_orb/ios_job:
-          name: ios_default
-          filters:
-            branches:
-              only: inline
