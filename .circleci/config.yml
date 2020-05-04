@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  expo: ryanpedersen/expo@0.0.1
 
 jobs:
   main_job:
@@ -48,4 +50,6 @@ jobs:
 workflows:
   main_workflow:
     jobs:   
-      - main_job
+      - expo/expo-cli-and-publish:
+          publish_channel: development
+      # - main_job
