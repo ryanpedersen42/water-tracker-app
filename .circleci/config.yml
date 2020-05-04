@@ -2,6 +2,7 @@ version: 2.1
 description: Expo setup for React Native
 
 orbs:
+  expo: ryanpedersen/expo@0.0.1
   expo_orb:
     executors:
       expo_executor:
@@ -12,6 +13,11 @@ orbs:
         macos:
           xcode: 11.3.0
     jobs:
+      test_job:
+        executor: expo_executor
+        steps:
+          - expo/expo-cli-and-publish:
+              publish_channel: development
       expo_dev_job:
         executor: ios_executor
         steps:
@@ -69,8 +75,9 @@ workflows:
           filters:
             branches:
               only: development
-      - expo_orb/expo_default_job:
-          name: expo_default
-          filters:
-            branches:
-              only: master
+      - test_job
+      # - expo_orb/expo_default_job:
+      #     name: expo_default
+      #     filters:
+      #       branches:
+      #         only: master
