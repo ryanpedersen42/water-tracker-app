@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   progressText: {
-    fontFamily: 'inconsolata-regular',
+    // fontFamily: 'inconsolata-regular',
     textAlign: 'center',
     marginTop: 15,
     fontSize: 35,
