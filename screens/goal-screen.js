@@ -72,14 +72,14 @@ const styles = StyleSheet.create({
   },
   goalNumber: {
     fontSize: 50,
-    fontFamily: 'inconsolata-regular',
+    // fontFamily: 'inconsolata-regular',
     color: 'white'
   },
   goalPrompt: {
     margin: 10,
     textAlign: 'center',
-    fontFamily: 'inconsolata-regular',
-    color: Colors.accentColorOrange
+    // fontFamily: 'inconsolata-regular',
+    color: 'white'
   }
 })
 

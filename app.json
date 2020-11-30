@@ -13,7 +13,7 @@
     "splash": {
       "image": "./assets/water-drop-new.png",
       "resizeMode": "contain",
-      "backgroundColor": "#625C66"
+      "backgroundColor": "#0D110F"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,7 +24,7 @@
     "ios": {
       "bundleIdentifier": "com.rpd42.waterapp",
       "supportsTablet": true,
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.1"
     },
     "android": {
       "package": "com.rpd42.water_app",
