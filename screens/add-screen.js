@@ -13,6 +13,7 @@ import { Slider, Button, ThemeProvider } from "react-native-elements";
 import moment from "moment";
 
 import CustomButton from "../components/custom-button";
+import CustomTextButton from '../components/custom-text-button';
 import ProgressTracker from "../components/progress-tracker";
 import {
   updateDailyConsumption,
@@ -187,15 +188,39 @@ const AddScreen = () => {
         </View>
       </View>
       <View style={Platform.OS === "android" ? styles.androidFocusButtons : ""}>
-      <View>
-        <Button
-          title="Add to Log"
-          style={styles.focusButton}
-          color={Colors.accentColorBlue}
-          onPress={addWaterProgress}
-        />
+        <View>
+          <Button
+            title="Add to Log"
+            style={styles.focusButton}
+            color={Colors.accentColorBlue}
+            onPress={addWaterProgress}
+          />
 
-      </View>
+        </View>
+        {/* <View style={{
+          width: "100%",
+          margin: 0,
+          paddingLeft: "20%",
+          paddingRight: "20%",
+        }}>
+          <CustomTextButton onPress={addWaterProgress}
+          >
+            <Text>{'Add to Log'}</Text>
+          </CustomTextButton>
+
+        </View>
+        <View style={{
+          width: "100%",
+          margin: 0,
+          paddingLeft: "20%",
+          paddingRight: "20%",
+        }}>
+          <CustomTextButton onPress={addWaterProgress}
+          >
+            <Text>{'Reset Log'}</Text>
+          </CustomTextButton>
+
+        </View> */}
         <View>
         <Button
           title="Reset Log"
