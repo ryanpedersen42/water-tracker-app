@@ -34,6 +34,7 @@ jobs:
     executor: node
     steps:
       - checkout
+      - expo/expo-auth
       - expo/get-ios-ipa
 
 workflows:
