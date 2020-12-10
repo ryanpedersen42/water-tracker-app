@@ -30,8 +30,14 @@ jobs:
       - expo/expo-auth
       - expo/expo-build
       - expo/get-ios-ipa
+  expo_get_ipa:
+    executor: node
+      steps:
+        - checkout
+        - expo/get-ios-ipa
 
 workflows:
   build_expo:
     jobs:
-      - expo_build_and_get_ipa
+      # - expo_build_and_get_ipa
+      - expo_get_ipa
