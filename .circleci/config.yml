@@ -49,6 +49,8 @@ jobs:
           key: node-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - expo/expo-auth
       - expo/get-ios-ipa
+      - store_artifacts:
+          path: ~/project/app.ipa
 
 workflows:
   build_expo:
