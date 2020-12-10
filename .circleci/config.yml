@@ -32,9 +32,9 @@ jobs:
       - expo/get-ios-ipa
   expo_get_ipa:
     executor: node
-      steps:
-        - checkout
-        - expo/get-ios-ipa
+    steps:
+      - checkout
+      - expo/get-ios-ipa
 
 workflows:
   build_expo:
