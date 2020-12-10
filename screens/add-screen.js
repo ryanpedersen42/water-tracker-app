@@ -28,7 +28,7 @@ const theme = {
   Button: {
     titleStyle: {
       color: Colors.accentColorBlue,
-      fontFamily: "inconsolata-regular",
+      // fontFamily: "inconsolata-regular",
       margin: 15,
     },
   },
