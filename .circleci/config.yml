@@ -40,7 +40,7 @@ jobs:
           command: |
             if [ $CIRCLE_NODE_INDEX -eq 0 ]; then
               npx expo-cli build:android --release-channel production --non-interactive --no-publish 
-            elif [ $CIRCLE_NODE_INDEX -eq 1]; then
+            elif [[ $CIRCLE_NODE_INDEX -eq 1]]; then
               npx expo-cli build:ios --release-channel production --non-interactive --no-publish 
             fi
           # no_output_timeout: <<parameters.timeout>>    
