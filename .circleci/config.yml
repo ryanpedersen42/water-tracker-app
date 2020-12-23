@@ -43,7 +43,7 @@ jobs:
             elif [[ $CIRCLE_NODE_INDEX -eq 1 ]]; then
               npx expo-cli build:ios --release-channel production --non-interactive --no-publish 
             fi
-          # no_output_timeout: <<parameters.timeout>>    
+          no_output_timeout: '30m'   
   expo_build_and_get_ipa:
     executor: node
     steps:
