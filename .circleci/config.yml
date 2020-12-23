@@ -16,6 +16,19 @@ jobs:
     steps:
       - checkout
       - expo/expo-auth
+      - restore_cache:
+          keys:
+            - node-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - node-cache-v1-{{ .Branch }}-
+            - node-cache-v1-
+      - run:
+          name: Fetch dependencies
+          command: npm install
+      - save_cache:
+          paths:
+            - ~/.npm
+            - ~/.cache
+          key: node-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run: 
           name: Check for parallelism
           command: |
