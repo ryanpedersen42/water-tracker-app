@@ -10,6 +10,27 @@ executors:
       - image: cimg/node:14.0.0
 
 jobs:
+  test:
+    executor: node
+    parallelism: 2
+    steps:
+      - checkout
+      - expo/expo-auth
+      - run: 
+          name: Check for parallelism
+          command: |
+            if [ $NODE_TOTAL -ne 2 ]; then
+              echo "Need to have parallelism set to 2"
+              exit 1
+            fi
+      - run: 
+          command: |
+            if [ $CIRCLE_NODE_INDEX -eq 0 ]; then
+              npx expo-cli build:android --release-channel production --non-interactive --no-publish 
+            elif [ $CIRCLE_NODE_INDEX -eq 1]; then
+              npx expo-cli build:ios --release-channel production --non-interactive --no-publish 
+            fi
+          # no_output_timeout: <<parameters.timeout>>    
   expo_build_and_get_ipa:
     executor: node
     steps:
@@ -55,5 +76,6 @@ jobs:
 workflows:
   build_expo:
     jobs:
+      - test
       # - expo_build_and_get_ipa
-      - expo_get_ipa
+      # - expo_get_ipa
