@@ -2,83 +2,93 @@ version: 2.1
 description: Expo setup for React Native
 
 orbs:
-  expo: ryanpedersen/expo@0.0.1
-  expo_orb:
-    executors:
-      expo_executor:
-        docker:
-          - image: circleci/node:13.10.1
-      #ios here 
-      ios_executor:
-        macos:
-          xcode: 11.3.0
-    jobs:
-      test_job:
-        executor: expo_executor
-        steps:
-          - expo/expo-cli-and-publish:
-              publish_channel: development
-      expo_dev_job:
-        executor: ios_executor
-        steps:
-          - expo_build_command:
-              release_channel: "dev"
-      expo_default_job:
-        executor: ios_executor
-        steps:
-          - expo_build_command:
-              release_channel: "default"
-      ios_job:
-        executor: ios_executor
-        steps:
-          - ios_command
+  expo: ryanpedersen/expo@0.1.0
 
-    commands:
-      ios_command:
-        description: ios expo and fastlane 
-        steps:
-          - checkout
+executors:
+  node:
+    docker:
+      - image: cimg/node:14.0.0
 
-      expo_build_command:
-        description: building and sending to expo
-        parameters:
-          release_channel:
-            type: string
-            default: "default"
-        steps:
-          - checkout
-          - run:
-              name: expo login
-              command: | 
-                sudo npm install -g expo-cli
-                npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-          - run:
-              name: build iOS app
-              no_output_timeout: 30m
-              command: |
-                npx expo-cli build:ios --release-channel development --non-interactive --no-publish 
-          - run:
-              name: get ipa 
-              command: |
-                curl -o app.ipa "$(expo url:ipa --non-interactive)"
-
-          - run:
-              name: fastlane deliver 
-              command: |
-                fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
-
+jobs:
+  test:
+    executor: node
+    parallelism: 2
+    steps:
+      - checkout
+      - expo/expo-auth
+      - restore_cache:
+          keys:
+            - node-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - node-cache-v1-{{ .Branch }}-
+            - node-cache-v1-
+      - run:
+          name: Fetch dependencies
+          command: npm install
+      - save_cache:
+          paths:
+            - ~/.npm
+            - ~/.cache
+          key: node-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - run: 
+          name: Check for parallelism
+          command: |
+            if [ $NODE_TOTAL -ne 2 ]; then
+              echo "Need to have parallelism set to 2"
+              exit 1
+            fi
+      - run: 
+          command: |
+            if [ $CIRCLE_NODE_INDEX -eq 0 ]; then
+              npx expo-cli build:android --release-channel production --non-interactive --no-publish 
+            elif [[ $CIRCLE_NODE_INDEX -eq 1 ]]; then
+              npx expo-cli build:ios --release-channel production --non-interactive --no-publish 
+            fi
+          no_output_timeout: '30m'   
+  expo_build_and_get_ipa:
+    executor: node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - node-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - node-cache-v1-{{ .Branch }}-
+            - node-cache-v1-
+      - run:
+          name: Fetch dependencies
+          command: npm install
+      - save_cache:
+          paths:
+            - ~/.npm
+            - ~/.cache
+          key: node-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - expo/expo-auth
+      - expo/expo-build
+      - expo/get-ios-ipa
+  expo_get_ipa:
+    executor: node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - node-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - node-cache-v1-{{ .Branch }}-
+            - node-cache-v1-
+      - run:
+          name: Fetch dependencies
+          command: npm install
+      - save_cache:
+          paths:
+            - ~/.npm
+            - ~/.cache
+          key: node-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - expo/expo-auth
+      - expo/get-ios-ipa
+      - store_artifacts:
+          path: ~/project/app.ipa
 
 workflows:
-  publish_to_expo:
+  build_expo:
     jobs:
-      - expo_orb/expo_dev_job:
-          name: expo_dev
-          filters:
-            branches:
-              only: development
-      - test_job
-      # - expo_orb/expo_default_job:
-      #     name: expo_default
-      #     filters:
-      #       branches:
-      #         only: master
+      - test
+      # - expo_build_and_get_ipa
+      # - expo_get_ipa
