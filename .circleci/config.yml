@@ -67,6 +67,7 @@ orbs:
               command: |
                 fastlane deliver --verbose --ipa "app.ipa" --skip_screenshots --skip_metadata
 
+
 workflows:
   publish_to_expo:
     jobs:
