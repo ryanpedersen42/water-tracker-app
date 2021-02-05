@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View, Dimensions, Alert, Button, AsyncStorage } from 'react-native';
+import { Text, StyleSheet, View, Dimensions, Alert, Button } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector} from 'react-redux';
 
 import CustomButton from '../components/custom-button';

@@ -1,5 +1,5 @@
 import { UPDATE_WATER_GOAL, ADJUST_WATER, RESET_WATER, APP_READY } from './water-constants';
-import { AsyncStorage } from 'react-native'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const setNewGoal = (newGoal) => {
   try {

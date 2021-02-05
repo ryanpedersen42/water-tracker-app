@@ -4,10 +4,10 @@ import {
   StyleSheet,
   View,
   Dimensions,
-  AsyncStorage,
   ActivityIndicator,
-  YellowBox,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Slider, Button } from "react-native-elements";
 import moment from "moment";
@@ -61,7 +61,6 @@ const AddScreen = () => {
 
   const checkDate = async () => {
     // AsyncStorage.clear()
-    console.disableYellowBox = true;
     let storedDate = await getStoredDate();
     let currentDateString = await moment().format("ll");
 

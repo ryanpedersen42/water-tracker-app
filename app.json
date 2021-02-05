@@ -1,6 +1,7 @@
 {
   "expo": {
-    "name": "water-consumption-app-rp",
+    "name": "HydratedGrizzly",
+    "scheme": "hydratedgrizzly",
     "slug": "water-app",
     "privacy": "public",
     "platforms": [
