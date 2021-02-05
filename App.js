@@ -39,14 +39,14 @@ export default function App() {
   }
 
   return (
-  // <Provider store={store}>
-  //   <TabNavigator />
-  // </Provider>
-  <Provider store={store}>
-  <SafeAreaProvider>
-    <Navigation />
-    <StatusBar />
-  </SafeAreaProvider>
-</Provider>
+    // <Provider store={store}>
+    //   <TabNavigator />
+    // </Provider>
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <Navigation />
+        <StatusBar />
+      </SafeAreaProvider>
+    </Provider>
   );
 }

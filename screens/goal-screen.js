@@ -23,9 +23,9 @@ const GoalScreen = () => {
       await updateGoal(waterGoal + 8)
     }
     if (direction === 'lower') {
-      if (waterGoal <= 8) {
-          Alert.alert("Cant have less than that!", 'You will wither away...', [
-            { text: 'alright!' }
+      if (waterGoal <= 128) {
+        Alert.alert("Cant go any lower!", 'That`s not a championship goal', [
+          { text: 'alright' }
           ]);
           return;
       }

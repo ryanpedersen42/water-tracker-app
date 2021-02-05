@@ -17,6 +17,12 @@ const ProgressTracker = (props) => {
 
   const progressInt = parseInt(currentProgress);
 
+  const progressText = (currentProgress < 20) ? 'Bad guy' : 
+    (currentProgress < 40) ? 'Blatant disregard for teammates' : 
+    (currentProgress < 60) ? 'Selfish teammate' : 
+    (currentProgress < 80) ? 'Practice squad effort' :
+    (currentProgress < 100) ? 'Almost there, king' : 'Championship level hydration'
+  
   const progressStyles = {
     alignContent: 'flex-start',
     height: 30,
@@ -29,6 +35,8 @@ const ProgressTracker = (props) => {
   return (
     <View style={styles.progressComponent}>
       <Text style={styles.progressText}>{currentProgress}%</Text>
+      <Text style={styles.statusText}>{progressText}</Text>
+
       {
         progressInt > 0 && <View style={progressStyles}></View>
       }
@@ -47,6 +55,14 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: 'white',
   },
+  statusText: {
+    // fontFamily: 'inconsolata-regular',
+    textAlign: 'center',
+    marginTop: 15,
+    fontSize: 18,
+    color: 'white',
+    paddingBottom: '5%'
+  }
 })
 
 export default ProgressTracker;

@@ -9,7 +9,7 @@ import {
   YellowBox,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { Slider, Button, ThemeProvider } from "react-native-elements";
+import { Slider, Button } from "react-native-elements";
 import moment from "moment";
 
 import CustomButton from "../components/custom-button";
@@ -23,16 +23,6 @@ import {
 } from "../store/water-actions";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
-
-const theme = {
-  Button: {
-    titleStyle: {
-      color: Colors.accentColorBlue,
-      // fontFamily: "inconsolata-regular",
-      margin: 15,
-    },
-  },
-};
 
 const AddScreen = () => {
   const [quantitySelected, changeQuantity] = useState(12);
@@ -197,30 +187,6 @@ const AddScreen = () => {
           />
 
         </View>
-        {/* <View style={{
-          width: "100%",
-          margin: 0,
-          paddingLeft: "20%",
-          paddingRight: "20%",
-        }}>
-          <CustomTextButton onPress={addWaterProgress}
-          >
-            <Text>{'Add to Log'}</Text>
-          </CustomTextButton>
-
-        </View>
-        <View style={{
-          width: "100%",
-          margin: 0,
-          paddingLeft: "20%",
-          paddingRight: "20%",
-        }}>
-          <CustomTextButton onPress={addWaterProgress}
-          >
-            <Text>{'Reset Log'}</Text>
-          </CustomTextButton>
-
-        </View> */}
         <View>
         <Button
           title="Reset Log"
