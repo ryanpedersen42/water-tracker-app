@@ -1,6 +1,0 @@
-module Pods_waterconsumptionapprp {
-  umbrella header "Pods-waterconsumptionapprp-umbrella.h"
-
-  export *
-  module * { export * }
-}
